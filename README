@@ -1,0 +1,18 @@
+Name: SimonElf
+  Simon's clone in ruby under blendelf
+
+License:
+  Same as blendelf
+
+Version:
+  0.1
+
+Copyright:
+  Copyright (c) 2010 [Carlos Bolaños](http://urbin.es).
+
+Dependencies:
+  - Blendelf ruby ext (http://github.com/cartuchogl/blendelf)
+  - bullet, sdl, ...
+
+Notes:
+  - Only tested on snow leopard
