@@ -44,6 +44,9 @@ function class(base, init)
   return c
 end
 
+-- Initialize the pseudo random number generator
+math.randomseed( os.time() )
+
 Game = class(function(game,level)
   game.level = 0
   game.steps = {}
