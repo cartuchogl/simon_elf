@@ -89,11 +89,12 @@ Button = class(function(btn,number)
   btn.number = number
   btn.imgoff = elf.CreateTextureFromFile("resources/simon"..number..".png")
   btn.imgover = elf.CreateTextureFromFile("resources/simon"..number.."over.png")
+  btn.imglight = elf.CreateTextureFromFile("resources/simon"..number.."light.png")
   btn.snd = elf.LoadSound("resources/snd"..number..".ogg")
   btn.btn = elf.CreateButton('SndBtn'..number)
   elf.SetButtonOffTexture(btn.btn, btn.imgoff) 
   elf.SetButtonOverTexture(btn.btn, btn.imgover) 
-  elf.SetButtonOnTexture(btn.btn, btn.imgoff)
+  elf.SetButtonOnTexture(btn.btn, btn.imglight)
 end)
 
 function Button:rx()
@@ -106,7 +107,7 @@ end
 
 function Button:highlight()
   self.pic = elf.CreatePicture("ButtonHihighlight"..self.number)
-  elf.SetPictureTexture(self.pic, self.imgover)
+  elf.SetPictureTexture(self.pic, self.imglight)
   elf.AddGuiObject(gui, self.pic)
   size = elf.GetGuiObjectPosition(self.btn)
   elf.SetGuiObjectPosition(self.pic, size.x, size.y)
@@ -120,7 +121,7 @@ function Button:dehighlight()
 end
 
 -- set window title 
-elf.SetTitle("BlendELF Test Context")
+elf.SetTitle("The Simon's blendelf")
 
 -- limit fps
 elf.SetFpsLimit(25)
@@ -198,7 +199,7 @@ for i,b in ipairs(btns) do
   size = elf.GetGuiObjectSize(b.elf_btn)
   elf.SetGuiObjectPosition(b.elf_btn, 
   elf.GetWindowWidth()-size.x, 
-  elf.GetWindowHeight()-(size.y*(i+1))
+  elf.GetWindowHeight()-(size.y*(i))
   )
 
   exscr = elf.CreateScript() 
