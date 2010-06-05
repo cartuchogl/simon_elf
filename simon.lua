@@ -45,11 +45,11 @@ function class(base, init)
 end
 
 Game = class(function(game,level)
-game.level = 0
-game.steps = {}
-game:start_next_level()
-game.played = false
-game.snd = nil
+  game.level = 0
+  game.steps = {}
+  game:start_next_level()
+  game.played = false
+  game.snd = nil
 end)
 
 function Game:start_next_level()
@@ -67,6 +67,10 @@ function Game:next_step()
   return self.steps[self.cursor]
 end
 
+function Game:prev_step()
+  return self.steps[self.cursor-1]
+end
+
 function Game:do_step(step)
   if self.steps[self.cursor] == step then
     self.cursor = self.cursor+1
@@ -82,13 +86,14 @@ end
 
 
 Button = class(function(btn,number)
-btn.imgoff = elf.CreateTextureFromFile("resources/simon"..number..".png")
-btn.imgover = elf.CreateTextureFromFile("resources/simon"..number.."over.png")
-btn.snd = elf.LoadSound("resources/snd"..number..".ogg")
-btn.btn = elf.CreateButton('SndBtn'..number)
-elf.SetButtonOffTexture(btn.btn, btn.imgoff) 
-elf.SetButtonOverTexture(btn.btn, btn.imgover) 
-elf.SetButtonOnTexture(btn.btn, btn.imgoff)
+  btn.number = number
+  btn.imgoff = elf.CreateTextureFromFile("resources/simon"..number..".png")
+  btn.imgover = elf.CreateTextureFromFile("resources/simon"..number.."over.png")
+  btn.snd = elf.LoadSound("resources/snd"..number..".ogg")
+  btn.btn = elf.CreateButton('SndBtn'..number)
+  elf.SetButtonOffTexture(btn.btn, btn.imgoff) 
+  elf.SetButtonOverTexture(btn.btn, btn.imgover) 
+  elf.SetButtonOnTexture(btn.btn, btn.imgoff)
 end)
 
 function Button:rx()
@@ -97,6 +102,21 @@ end
 
 function Button:ry()
   return elf.GetGuiObjectSize(self.btn).y
+end
+
+function Button:highlight()
+  self.pic = elf.CreatePicture("ButtonHihighlight"..self.number)
+  elf.SetPictureTexture(self.pic, self.imgover)
+  elf.AddGuiObject(gui, self.pic)
+  size = elf.GetGuiObjectPosition(self.btn)
+  elf.SetGuiObjectPosition(self.pic, size.x, size.y)
+end
+
+function Button:dehighlight()
+  if self.pic then
+    elf.RemoveGuiObjectByObject(gui, self.pic)
+    self.pic = nil
+  end
 end
 
 -- set window title 
@@ -213,9 +233,13 @@ while elf.Run()==true do
     -- play current steps first
   else
     if not (game.snd~=nil and elf.IsSoundPlaying(game.snd)==true) then
+      if game:prev_step()~=nil then
+        snds[game:prev_step()]:dehighlight()
+      end
       if not game:cleared()==true then
         print(game:next_step())
         game.snd = elf.PlaySound(snds[game:next_step()].snd,1.0)
+        snds[game:next_step()]:highlight()
         game:do_step(game:next_step())
       else
         game:restart_level()
