@@ -13,6 +13,10 @@ Copyright:
 Dependencies:
   - Blendelf ruby ext (http://github.com/cartuchogl/blendelf) for ruby version
   - bullet, sdl, ...
+  
+Usage:
+  For ruby version "ruby simon.rb"
+  For lua version "./blendelf simon.lua"
 
 Notes:
   - If you are not using my fork of blendelf rename simon.lua to init.lua
